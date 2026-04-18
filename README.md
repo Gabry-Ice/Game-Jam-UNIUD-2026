@@ -11,4 +11,9 @@ idea: posizione: Marte
       meccanica: il giocatore è il segnale e deve evitare gli alieni durante il suo percorso
                  ci sono asteroidi che se passano possono bloccare il segnale
       Oggetti: segnale, satelliti
-      
+
+scripts : 
+- ai nemici 
+- movimento del segnale
+- ai satelliti
+- 
