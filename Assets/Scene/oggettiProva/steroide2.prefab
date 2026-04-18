@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 788717416508414095}
   - component: {fileID: 9035970929784856839}
   - component: {fileID: 310498736113409362}
+  - component: {fileID: 1107557495192610512}
   m_Layer: 0
   m_Name: steroide2
   m_TagString: asteroide
@@ -109,6 +110,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.3159816, y: 1, z: 1.9849637}
   m_Center: {x: 0.16293895, y: 0, z: -0.21261561}
+--- !u!114 &1107557495192610512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6043588751216293171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf1ec4ee3c0d724696dda33801ceb48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocitaMin: 14
+  velocitaMax: 16
 --- !u!1001 &1357357786029901683
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -160,7 +175,7 @@ PrefabInstance:
     - target: {fileID: 3321841898315479970, guid: 52e5665ed874ab649afee8d6df0ab38e, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 1870602691211627771, guid: ba8ad55c52432c9458973a60328b3451, type: 3}
+      objectReference: {fileID: 2100000, guid: 0d0ec94203dcff546a19edacb8904956, type: 2}
     - target: {fileID: 5252957863175906491, guid: 52e5665ed874ab649afee8d6df0ab38e, type: 3}
       propertyPath: m_Name
       value: Rock8

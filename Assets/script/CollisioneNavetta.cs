@@ -8,7 +8,7 @@ public class CollisioneNavetta : MonoBehaviour
         if (collision.gameObject.CompareTag("asteroide"))
         {
 
-            Debug.Log("dentroooo");
+            //Debug.Log("dentroooo");
             Destroy(navetta);
         }
     }

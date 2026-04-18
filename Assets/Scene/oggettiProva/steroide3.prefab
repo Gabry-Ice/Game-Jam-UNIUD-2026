@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 788717416508414095}
   - component: {fileID: 9035970929784856839}
   - component: {fileID: 310498736113409362}
+  - component: {fileID: 1191931499474646803}
   m_Layer: 0
   m_Name: steroide3
   m_TagString: asteroide
@@ -109,6 +110,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.8005834, y: 1, z: 3.1546667}
   m_Center: {x: -0.23514247, y: 0, z: -0.17145884}
+--- !u!114 &1191931499474646803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6043588751216293171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf1ec4ee3c0d724696dda33801ceb48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocitaMin: 18
+  velocitaMax: 20
 --- !u!1001 &4523749149166733974
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -164,7 +179,7 @@ PrefabInstance:
     - target: {fileID: 8687226547870863576, guid: 3054692602d6b2c418a430defcc5dca4, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: -6393810844979742688, guid: ba8ad55c52432c9458973a60328b3451, type: 3}
+      objectReference: {fileID: 2100000, guid: 0d0ec94203dcff546a19edacb8904956, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
