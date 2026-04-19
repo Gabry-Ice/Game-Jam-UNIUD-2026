@@ -9,6 +9,7 @@ TagManager:
   - asteroide
   - Enemy
   - Segnale
+  - Satellite
   layers:
   - Default
   - TransparentFX
