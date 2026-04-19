@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocita: 15
   velocitaRotazione: 15
-  durataInseguimento: 4
+  durataInseguimento: 10
   velocitaFuga: 8
 --- !u!54 &1730109564249129531
 Rigidbody:
@@ -164,9 +164,21 @@ PrefabInstance:
       value: Enemy2
       objectReference: {fileID: 0}
     - target: {fileID: 3624069735985669661, guid: 0be16fb19c4d4db4897d9baa46e526c4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624069735985669661, guid: 0be16fb19c4d4db4897d9baa46e526c4, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: ab5014473aa3bc84cad3d20fec3d8c8f, type: 2}
+    - target: {fileID: 9019457069860389145, guid: 0be16fb19c4d4db4897d9baa46e526c4, type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9019457069860389145, guid: 0be16fb19c4d4db4897d9baa46e526c4, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

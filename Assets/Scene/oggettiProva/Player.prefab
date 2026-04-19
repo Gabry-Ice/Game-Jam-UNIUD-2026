@@ -206,6 +206,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  velocitaRotazione: 10
+  cameraPrincipale: {fileID: 0}
+  offsetBordo: 0.05
 --- !u!1 &8696560814051754218
 GameObject:
   m_ObjectHideFlags: 0

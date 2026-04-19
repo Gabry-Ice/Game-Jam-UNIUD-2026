@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7891523391895727698}
   - component: {fileID: 6957905743999485042}
-  - component: {fileID: 4030304258936263044}
   - component: {fileID: 2233739361654952167}
   m_Layer: 0
   m_Name: Enemy1
@@ -49,34 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocita: 5
   velocitaRotazione: 5
-  durataInseguimento: 4
+  durataInseguimento: 8
   velocitaFuga: 8
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2586374905509860117}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!65 &2233739361654952167
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -172,7 +145,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: cd553783334fe3a41bc72a67ca75bc59, type: 2}
     - target: {fileID: 9019457069860389145, guid: 0be16fb19c4d4db4897d9baa46e526c4, type: 3}
       propertyPath: m_Convex
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9019457069860389145, guid: 0be16fb19c4d4db4897d9baa46e526c4, type: 3}
       propertyPath: m_Enabled

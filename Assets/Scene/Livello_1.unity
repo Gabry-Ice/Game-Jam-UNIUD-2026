@@ -243,6 +243,10 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 126
       objectReference: {fileID: 0}
+    - target: {fileID: 1551124965062948208, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2586374905509860117, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
       propertyPath: m_Name
       value: Player
@@ -511,7 +515,7 @@ MonoBehaviour:
   nave: {fileID: 372126224}
   raggioDiSicurezza: 10
   maxTentativi: 10
-  difficolta: 45
+  difficolta: 1
   intervalloMinimo: 0.3
   moltiplicatoreDifficolta: 0.5
 --- !u!1 &610958770
