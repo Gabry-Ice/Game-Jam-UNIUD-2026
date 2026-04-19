@@ -103,19 +103,30 @@ public class AsteroidSpawner : MonoBehaviour
 
     void SpawnAsteroide()
     {
+        Debug.Log("Spawnato asteroide");
+
         GameObject[] pool = Random.value > 0.5f ? prefabAsteroidi : prefabAstronavi;
-        if (pool.Length == 0) return;
+
+        if (pool.Length == 0)
+        {
+            Debug.Log("Pool vuoto");
+            return;
+        }
 
         int indice = Random.Range(0, pool.Length);
         GameObject prefab = pool[indice];
+
         if (prefab == null) return;
 
         for (int i = 0; i < maxTentativi; i++)
         {
             Vector3 spawnPos = GetPosizioneeFuoriCamera();
+            float distanza = nave == null ? -1f : Vector3.Distance(spawnPos, nave.position);
+            Debug.Log($"Tentativo {i}: posizione {spawnPos}, distanza nave {distanza}");
 
             if (nave == null || Vector3.Distance(spawnPos, nave.position) >= raggioDiSicurezza)
             {
+                Debug.Log($"Spawn riuscito in {spawnPos}");
                 Instantiate(prefab, spawnPos, Quaternion.identity);
                 return;
             }

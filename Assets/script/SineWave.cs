@@ -34,7 +34,7 @@ public class SineWave : MonoBehaviour
             float t = (float)i / (punti - 1);
             float z = Mathf.Lerp(-lunghezza / 2f, lunghezza / 2f, t);
             float x = ampiezza * Mathf.Sin(2f * Mathf.PI * frequenza * t - tempo);
-            lr.SetPosition(i, new Vector3(x, 3f, z));
+            lr.SetPosition(i, new Vector3(x, 0f, z));
         }
     }
 

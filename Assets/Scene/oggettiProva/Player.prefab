@@ -332,6 +332,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navetta: {fileID: 2586374905509860117}
+  sfxEsplosione: {fileID: 8300000, guid: cffca233f5201b64db45e1c401aa8ab0, type: 3}
+  prefabEsplosione: {fileID: 191186, guid: 079954accd64b32419ec069129c81273, type: 3}
+  ritardoDistruzione: 1
 --- !u!54 &1474696074551613569
 Rigidbody:
   m_ObjectHideFlags: 0

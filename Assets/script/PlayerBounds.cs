@@ -2,6 +2,15 @@ using UnityEngine;
 
 public class PlayerBounds : MonoBehaviour
 {
+     private Camera cam;
+
+    void Start()
+    {
+        cam = Camera.main;
+        if (cam == null)
+            Debug.LogError("Nessuna camera con tag MainCamera trovata!");
+    }
+
     void LateUpdate()
     {
         // 1. Trova la distanza tra l'oggetto e la telecamera sull'asse Z
