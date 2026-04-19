@@ -8,6 +8,7 @@ TagManager:
   - navetta
   - asteroide
   - Enemy
+  - Segnale
   layers:
   - Default
   - TransparentFX

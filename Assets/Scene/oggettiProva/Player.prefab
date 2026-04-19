@@ -161,6 +161,8 @@ MonoBehaviour:
   velocita: 10
   lunghezza: 8
   punti: 400
+  coloreInizio: {r: 1, g: 1, b: 1, a: 1}
+  coloreFine: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &4302564809513292133
 MonoBehaviour:
   m_ObjectHideFlags: 0
