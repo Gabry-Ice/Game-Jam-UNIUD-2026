@@ -51,7 +51,6 @@ MonoBehaviour:
   velocitaRotazione: 5
   durataInseguimento: 4
   velocitaFuga: 8
---- !u!54 &4030304258936263044
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
