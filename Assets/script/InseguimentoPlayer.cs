@@ -10,9 +10,6 @@ public class astronave : MonoBehaviour
     public float durataInseguimento = 4f;   // secondi di inseguimento
     public float velocitaFuga = 8f;         // velocita dopo abbandono
 
-    [Header("Eliminazione")]
-    public float distanzaEliminazione = 30f; // distanza dal player per eliminarsi
-
     enum Stato { Inseguimento, Fuga }
     Stato stato = Stato.Inseguimento;
 
@@ -22,9 +19,10 @@ public class astronave : MonoBehaviour
 
     void Start()
     {
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Segnale");
         if (playerObj != null)
-            player = playerObj.transform;
+            Debug.Log("trovato");
+        player = playerObj.transform;
 
         timer = durataInseguimento;
     }
@@ -39,7 +37,7 @@ public class astronave : MonoBehaviour
         {
             if (timer <= 0f)
             {
-                // abbandona inseguimento, salva direzione di fuga
+                // Abbandona inseguimento, salva direzione di fuga
                 stato = Stato.Fuga;
                 direzioneFuga = (transform.position - player.position).normalized;
             }
@@ -51,12 +49,6 @@ public class astronave : MonoBehaviour
         else
         {
             Fuggi();
-
-            // si elimina quando e' abbastanza lontano dal player
-            if (Vector3.Distance(transform.position, player.position) >= distanzaEliminazione)
-            {
-                Destroy(gameObject);
-            }
         }
     }
 

@@ -6,6 +6,8 @@ public class CollisioneNavetta : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+
+        Debug.Log("dentro");
         if (collision.gameObject.CompareTag("asteroide") ||
             collision.gameObject.CompareTag("Enemy"))
         {
