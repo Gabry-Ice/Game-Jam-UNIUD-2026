@@ -10,7 +10,7 @@ public class AsteroidSpawner : MonoBehaviour
 
     [Header("Spawn")]
     public float intervalloSpawn = 2f;
-    public float raggioSpawn = 10f;
+    public float raggioSpawn = 10f;      // quanto fuori dalla telecamera spawnare
 
     [Header("Sicurezza")]
     public Transform nave;
@@ -22,11 +22,17 @@ public class AsteroidSpawner : MonoBehaviour
     public float intervalloMinimo = 0.3f;
     public float moltiplicatoreDifficolta = 0.1f;
 
+    [Header("Riferimenti")]
+    public Camera cameraPrincipale;
+
     float timer;
     float intervalloCorrente;
 
     void Start()
     {
+        if (cameraPrincipale == null)
+            cameraPrincipale = Camera.main;
+
         AggiornaDifficolta();
     }
 
@@ -55,11 +61,49 @@ public class AsteroidSpawner : MonoBehaviour
         );
     }
 
+    Vector3 GetPosizioneeFuoriCamera()
+    {
+        float distanza = Mathf.Abs(cameraPrincipale.transform.position.y - nave.position.y);
+
+        // calcola i bordi della camera in world space
+        Vector3 bottomLeft = cameraPrincipale.ViewportToWorldPoint(new Vector3(0, 0, distanza));
+        Vector3 topRight = cameraPrincipale.ViewportToWorldPoint(new Vector3(1, 1, distanza));
+
+        float minX = bottomLeft.x;
+        float maxX = topRight.x;
+        float minZ = bottomLeft.z;
+        float maxZ = topRight.z;
+
+        // scegli uno dei 4 lati casualmente
+        int lato = Random.Range(0, 4);
+        float x, z;
+
+        switch (lato)
+        {
+            case 0: // sinistra
+                x = minX - Random.Range(1f, raggioSpawn);
+                z = Random.Range(minZ, maxZ);
+                break;
+            case 1: // destra
+                x = maxX + Random.Range(1f, raggioSpawn);
+                z = Random.Range(minZ, maxZ);
+                break;
+            case 2: // basso
+                x = Random.Range(minX, maxX);
+                z = minZ - Random.Range(1f, raggioSpawn);
+                break;
+            default: // alto
+                x = Random.Range(minX, maxX);
+                z = maxZ + Random.Range(1f, raggioSpawn);
+                break;
+        }
+
+        return new Vector3(x, nave.position.y, z);
+    }
+
     void SpawnAsteroide()
     {
-        // sceglie casualmente tra asteroidi e astronavi
         GameObject[] pool = Random.value > 0.5f ? prefabAsteroidi : prefabAstronavi;
-
         if (pool.Length == 0) return;
 
         int indice = Random.Range(0, pool.Length);
@@ -68,12 +112,7 @@ public class AsteroidSpawner : MonoBehaviour
 
         for (int i = 0; i < maxTentativi; i++)
         {
-            Vector2 posCasuale = Random.insideUnitCircle * raggioSpawn;
-            Vector3 spawnPos = new Vector3(
-                transform.position.x + posCasuale.x,
-                nave.transform.position.y,
-                transform.position.z + posCasuale.y
-            );
+            Vector3 spawnPos = GetPosizioneeFuoriCamera();
 
             if (nave == null || Vector3.Distance(spawnPos, nave.position) >= raggioDiSicurezza)
             {
