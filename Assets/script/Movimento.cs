@@ -7,7 +7,7 @@ public class CubeMovement : MonoBehaviour
     public float speed = 10f;
     public float velocitaRotazione = 10f;
     public Camera cameraPrincipale;
-    public float offsetBordo = 0.05f;  // 0 = bordo esatto, 0.1 = 10% di margine interno
+    public float offsetBordo = 0f;  // Offset di 10 unità dai bordi
 
     void Start()
     {
@@ -42,14 +42,14 @@ public class CubeMovement : MonoBehaviour
     {
         if (cameraPrincipale == null) return posizione;
 
-        Vector3 viewPos = cameraPrincipale.WorldToViewportPoint(posizione);
+        // Calcola i limiti della telecamera in unità mondiali
+        float cameraHeight = 2f * cameraPrincipale.orthographicSize;
+        float cameraWidth = cameraHeight * cameraPrincipale.aspect;
 
-        viewPos.x = Mathf.Clamp(viewPos.x, offsetBordo, 1f - offsetBordo);
-        viewPos.y = Mathf.Clamp(viewPos.y, offsetBordo, 1f - offsetBordo);
+        // Limita la posizione del player in base all'offset
+        float limitX = Mathf.Clamp(posizione.x, cameraPrincipale.transform.position.x - cameraWidth + offsetBordo, cameraPrincipale.transform.position.x + cameraWidth - offsetBordo);
+        float limitZ = Mathf.Clamp(posizione.z, cameraPrincipale.transform.position.z - cameraHeight + offsetBordo, cameraPrincipale.transform.position.z + cameraHeight - offsetBordo);
 
-        Vector3 nuovaPosizione = cameraPrincipale.ViewportToWorldPoint(viewPos);
-        nuovaPosizione.y = posizione.y;
-
-        return nuovaPosizione;
+        return new Vector3(limitX, posizione.y, limitZ);
     }
 }
