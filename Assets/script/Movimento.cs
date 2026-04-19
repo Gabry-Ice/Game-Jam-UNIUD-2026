@@ -45,16 +45,16 @@ public class CubeMovement : MonoBehaviour
     {
         if (cameraPrincipale == null) return posizione;
 
-        // converti la posizione in viewport (0-1)
+        // converti in viewport mantenendo la distanza corretta dalla camera
         Vector3 viewPos = cameraPrincipale.WorldToViewportPoint(posizione);
 
-        // clamp dentro lo schermo
+        // clamp X e Y del viewport (0=bordo sinistro/basso, 1=bordo destro/alto)
         viewPos.x = Mathf.Clamp(viewPos.x, 0f, 1f);
-        viewPos.z = Mathf.Clamp(viewPos.z, 0f, 1f);
+        viewPos.y = Mathf.Clamp(viewPos.y, 0f, 1f);
 
-        // riconverti in world space mantenendo la Y originale
+        // riconverti in world space (viewPos.z contiene gia' la distanza dalla camera)
         Vector3 nuovaPosizione = cameraPrincipale.ViewportToWorldPoint(viewPos);
-        nuovaPosizione.y = posizione.y;
+        nuovaPosizione.y = posizione.y;  // mantieni la Y originale dell'oggetto
 
         return nuovaPosizione;
     }
