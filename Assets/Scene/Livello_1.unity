@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: speed
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 1474696074551613569, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
+      propertyPath: m_Constraints
+      value: 126
+      objectReference: {fileID: 0}
     - target: {fileID: 2586374905509860117, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
       propertyPath: m_Name
       value: Player
@@ -335,9 +339,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabAsteroidi:
-  - {fileID: 6043588751216293171, guid: 8ce4b4c8b7e4c254aa81948db7398d2c, type: 3}
-  - {fileID: 6043588751216293171, guid: 7ffb9af8ac36160469340d0008074f63, type: 3}
-  - {fileID: 6043588751216293171, guid: ac68396647a37114ca0e8269c0ee1ce4, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   prefabAstronavi:
   - {fileID: 2586374905509860117, guid: 3a8514f410c9d474db6cc42e52006550, type: 3}
   - {fileID: 2586374905509860117, guid: 168dd9251711df649be4a09693cd3505, type: 3}
