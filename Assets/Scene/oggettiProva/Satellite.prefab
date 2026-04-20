@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocita: 7
   raggioMassimo: 20
-  ritardoAvvio: 8
-  ritardoVisibilita: 8
+  ritardoVisibilita: 30
   velocitaRotazione: {x: 0, y: 90, z: 0}
+  nomeScenaWin: WINscreen
   spawner: {fileID: 0}

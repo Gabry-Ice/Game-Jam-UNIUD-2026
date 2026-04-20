@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement; // <--- Necessario per caricare le scene
 
 public class SatelliteSpawner : MonoBehaviour
 {
@@ -15,11 +16,14 @@ public class SatelliteSpawner : MonoBehaviour
     public float attesaDopoDistruzione = 5f;
 
     [Header("Area Spawn")]
-    public float raggioSpawn = 10f; // distanza massima dal GameObject vuoto
+    public float raggioSpawn = 10f;
 
     [Header("Avviso")]
     public string messaggioAvviso = "CHECKPOINT IN ARRIVO!";
-    public float durataAvviso = 3f; //ciao
+    public float durataAvviso = 3f;
+
+    [Header("Sconfitta")]
+    public string nomeScenaPerdita = "LoseScreen"; // Il nome della tua scena di Game Over
 
     int satelliteSpawnati = 0;
     bool checkpointPreso = false;
@@ -46,10 +50,12 @@ public class SatelliteSpawner : MonoBehaviour
     void SpawnSatellite()
     {
         if (checkpointPreso) return;
+
+        // Se abbiamo già spawnato il numero massimo, non ne creiamo altri
         if (satelliteSpawnati >= maxSatelliti) return;
+
         if (prefabSatellite == null) return;
 
-        // Punto casuale nel raggio attorno al GameObject vuoto
         Vector2 cerchio = Random.insideUnitCircle * raggioSpawn;
         Vector3 posCasuale = transform.position + new Vector3(cerchio.x, 0f, cerchio.y);
 
@@ -66,10 +72,20 @@ public class SatelliteSpawner : MonoBehaviour
 
     System.Collections.IEnumerator AttesaProssimoSpawn(GameObject satellite)
     {
+        // Aspetta che il satellite appena spawnato venga distrutto
         while (satellite != null)
             yield return null;
 
+        // Se il giocatore ha preso il checkpoint, fermati
         if (checkpointPreso) yield break;
+
+        // Se il satellite è stato distrutto (ma non preso) e abbiamo raggiunto il limite
+        if (satelliteSpawnati >= maxSatelliti)
+        {
+            Debug.Log("Terzo satellite perso. Caricamento scena sconfitta...");
+            SceneManager.LoadScene(nomeScenaPerdita);
+            yield break;
+        }
 
         yield return new WaitForSeconds(attesaDopoDistruzione);
 
@@ -121,7 +137,6 @@ public class SatelliteSpawner : MonoBehaviour
             testoAvviso.gameObject.SetActive(false);
     }
 
-    // Mostra il raggio nell'editor come sfera wireframe
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;

@@ -58,7 +58,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocitaMin: 14
   velocitaMax: 16
-  durata: 5
+  durataFailsafe: 10
 --- !u!54 &9041385399504358751
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -162,6 +162,10 @@ PrefabInstance:
     - target: {fileID: 5252957863175906491, guid: 52e5665ed874ab649afee8d6df0ab38e, type: 3}
       propertyPath: m_Name
       value: Rock8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5252957863175906491, guid: 52e5665ed874ab649afee8d6df0ab38e, type: 3}
+      propertyPath: m_TagString
+      value: asteroide
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

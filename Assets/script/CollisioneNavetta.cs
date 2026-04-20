@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; // <--- NECESSARIO per caricare le scene
 
 public class CollisioneNavetta : MonoBehaviour
 {
@@ -13,9 +14,13 @@ public class CollisioneNavetta : MonoBehaviour
     [SerializeField] AudioClip sfxEsplosioneAsteroide;
     [SerializeField] GameObject prefabEsplosioneAsteroide;
 
+    [Header("Scena")]
+    [SerializeField] string nomeScenaSconfitta = "LoseScreen"; // Il nome della tua scena di Game Over
+
     private void OnTriggerEnter(Collider collision)
     {
-        Debug.Log("dentro");
+        Debug.Log("Collisione rilevata con: " + collision.gameObject.tag);
+
         if (collision.gameObject.CompareTag("asteroide") ||
             collision.gameObject.CompareTag("Enemy"))
         {
@@ -24,8 +29,9 @@ public class CollisioneNavetta : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Satellite"))
         {
+            // Nota: Se il satellite deve caricare la WinScreen, 
+            // assicurati che sia gestito qui o nello script del Satellite
             Destroy(collision.gameObject);
-            Destroy(navetta);
             Debug.Log("Hai raggiunto il checkpoint!");
         }
     }
@@ -34,7 +40,6 @@ public class CollisioneNavetta : MonoBehaviour
     {
         Vector3 posizione = asteroide.transform.position;
 
-        // Effetto visivo sull'asteroide
         GameObject prefabDaUsare = prefabEsplosioneAsteroide != null
             ? prefabEsplosioneAsteroide
             : prefabEsplosione;
@@ -42,7 +47,6 @@ public class CollisioneNavetta : MonoBehaviour
         if (prefabDaUsare != null)
             Instantiate(prefabDaUsare, posizione, Quaternion.identity);
 
-        // Audio sull'asteroide
         AudioClip sfxDaUsare = sfxEsplosioneAsteroide != null
             ? sfxEsplosioneAsteroide
             : sfxEsplosione;
@@ -51,18 +55,37 @@ public class CollisioneNavetta : MonoBehaviour
             AudioSource.PlayClipAtPoint(sfxDaUsare, posizione, volumeEsplosione);
 
         Destroy(asteroide);
+
+        Debug.Log("richiamo loseScreen");
+        // 5. CARICA LA SCENA DI SCONFITTA
+        SceneManager.LoadScene(nomeScenaSconfitta);
     }
 
     private System.Collections.IEnumerator EsplodiNavetta()
     {
+        // 1. Crea l'effetto visivo
         if (prefabEsplosione != null)
             Instantiate(prefabEsplosione, navetta.transform.position, navetta.transform.rotation);
 
+        // 2. Riproduce l'audio
         if (sfxEsplosione != null)
             AudioSource.PlayClipAtPoint(sfxEsplosione, camera.transform.position, volumeEsplosione);
 
+        // 3. Nasconde la navetta invece di distruggerla subito 
+        // (altrimenti la coroutine si interrompe se lo script è sulla navetta)
         navetta.SetActive(false);
+
+        // 4. Aspetta che l'esplosione sia visibile/udibile
         yield return new WaitForSeconds(ritardoDistruzione);
+
+
+        
+
+        // 6. Distruggi definitivamente l'oggetto
         Destroy(navetta);
+
+        Debug.Log("richiamo loseScreen");
+        // 5. CARICA LA SCENA DI SCONFITTA
+        SceneManager.LoadScene(nomeScenaSconfitta);
     }
 }

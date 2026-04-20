@@ -373,6 +373,7 @@ MonoBehaviour:
   volumeEsplosione: 1
   sfxEsplosioneAsteroide: {fileID: 0}
   prefabEsplosioneAsteroide: {fileID: 0}
+  nomeScenaSconfitta: LoseScreen
 --- !u!54 &1474696074551613569
 Rigidbody:
   m_ObjectHideFlags: 0
