@@ -12,6 +12,8 @@ public class CubeMovement : MonoBehaviour
     public float moltiplicatoreBoost = 2f; // <-- nuovo campo
     public float durataBoost = 0.2f;
     public float tempoRicarica = 3f;
+    [SerializeField] AudioClip dash;
+    [SerializeField][Range(0f, 1f)] float volumeEsplosione = 10f;
 
     [Header("Bordi")]
     public float offsetBordo = 1f;
@@ -38,6 +40,8 @@ public class CubeMovement : MonoBehaviour
     {
         if (value.isPressed && boostDisponibile)
         {
+            if (dash != null)
+                AudioSource.PlayClipAtPoint(dash, cameraPrincipale.transform.position, volumeEsplosione); // <-- volume applicato
             Vector3 dir = new Vector3(moveInput.x, 0f, moveInput.y);
             if (dir == Vector3.zero)
                 dir = transform.forward;
