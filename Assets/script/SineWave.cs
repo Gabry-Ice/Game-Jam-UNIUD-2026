@@ -11,8 +11,8 @@ public class SineWave : MonoBehaviour
     public int punti = 100;
 
     [Header("Colore")]
-    public Color coloreInizio = Color.white;
-    public Color coloreFine = Color.white;   // uguale a inizio per colore uniforme
+    // Usare un Gradient ti permette di fare sfumature complesse dall'Inspector
+    public Gradient coloreOnda;
 
     LineRenderer lr;
     float tempo;
@@ -22,7 +22,14 @@ public class SineWave : MonoBehaviour
         lr = GetComponent<LineRenderer>();
         lr.positionCount = punti;
         lr.useWorldSpace = false;
-        AggiornaCOlore();
+
+        // Imposta il materiale Sprites-Default via codice se ti dimentichi
+        if (lr.material == null || lr.material.name.Contains("Default-Material"))
+        {
+            lr.material = new Material(Shader.Find("Sprites/Default"));
+        }
+
+        AggiornaColore();
     }
 
     void Update()
@@ -38,16 +45,15 @@ public class SineWave : MonoBehaviour
         }
     }
 
-    void AggiornaCOlore()
+    void AggiornaColore()
     {
-        lr.startColor = coloreInizio;
-        lr.endColor = coloreFine;
+        // Applica l'intero gradiente alla linea
+        lr.colorGradient = coloreOnda;
     }
 
-    // aggiorna il colore anche quando modificato dall'Inspector in Play Mode
     void OnValidate()
     {
         if (lr == null) lr = GetComponent<LineRenderer>();
-        if (lr != null) AggiornaCOlore();
+        if (lr != null) AggiornaColore();
     }
 }
