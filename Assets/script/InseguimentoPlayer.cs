@@ -7,10 +7,14 @@ public class astronave : MonoBehaviour
     public float velocitaRotazione = 5f;
 
     [Header("Inseguimento")]
-    public float durataInseguimento = 4f;   // secondi di inseguimento
-    public float velocitaFuga = 8f;         // velocita dopo abbandono
+    public float durataInseguimento = 4f;
+    public float velocitaFuga = 8f;
 
-    enum Stato { Inseguimento, Fuga }
+    [Header("Uscita Rapida")]
+    public float velocitaCaduta = 30f; // Molto veloce per sparire in 0.5s
+    private float timerMorte = 0.5f;   // Il tuo mezzo secondo
+
+    enum Stato { Inseguimento, Fuga, UscitaDiScena }
     Stato stato = Stato.Inseguimento;
 
     Transform player;
@@ -21,59 +25,77 @@ public class astronave : MonoBehaviour
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Segnale");
         if (playerObj != null)
-            Debug.Log("trovato");
-        player = playerObj.transform;
+            player = playerObj.transform;
 
         timer = durataInseguimento;
     }
 
     void Update()
     {
-        if (player == null) return;
+        if (stato == Stato.UscitaDiScena)
+        {
+            EseguiCadutaRapida();
+            return;
+        }
 
+        if (player == null) return;
         timer -= Time.deltaTime;
 
         if (stato == Stato.Inseguimento)
         {
             if (timer <= 0f)
             {
-                // Abbandona inseguimento, salva direzione di fuga
                 stato = Stato.Fuga;
                 direzioneFuga = (transform.position - player.position).normalized;
             }
-            else
-            {
-                Insegui();
-            }
+            else Insegui();
         }
-        else
+        else if (stato == Stato.Fuga)
         {
             Fuggi();
         }
     }
 
+    // --- LOGICA DI USCITA VELOCE ---
+
+    private void OnBecameInvisible()
+    {
+        if (stato != Stato.UscitaDiScena)
+        {
+            stato = Stato.UscitaDiScena;
+        }
+    }
+
+    void EseguiCadutaRapida()
+    {
+        // 1. Muove l'astronave verso il basso molto velocemente
+        transform.position += Vector3.down * velocitaCaduta * Time.deltaTime;
+
+        // 2. Riduce il timer di vita residua
+        timerMorte -= Time.deltaTime;
+
+        // 3. Allo scadere del mezzo secondo, distrugge l'oggetto
+        if (timerMorte <= 0f)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // --- METODI ORIGINALI ---
+
     void Insegui()
     {
-        // direzione verso il player su tutti gli assi
         Vector3 direzione = (player.position - transform.position).normalized;
-
-        // rotazione su X e Y verso il player
         if (direzione != Vector3.zero)
         {
             Quaternion rotazioneTarget = Quaternion.LookRotation(direzione);
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                rotazioneTarget,
-                velocitaRotazione * Time.deltaTime
-            );
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotazioneTarget, velocitaRotazione * Time.deltaTime);
         }
-
         transform.position += direzione * velocita * Time.deltaTime;
     }
 
     void Fuggi()
     {
-        // continua nella direzione di fuga senza ruotare
         transform.position += direzioneFuga * velocitaFuga * Time.deltaTime;
     }
 }

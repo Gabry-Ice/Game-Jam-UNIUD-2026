@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1dd7682af566a04db9449402f3c1fdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocita: 5
+  velocita: 10
   velocitaRotazione: 5
   durataInseguimento: 8
   velocitaFuga: 8

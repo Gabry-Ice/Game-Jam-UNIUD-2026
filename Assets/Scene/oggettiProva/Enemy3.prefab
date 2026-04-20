@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocita: 20
   velocitaRotazione: 20
-  durataInseguimento: 14
+  durataInseguimento: 12
   velocitaFuga: 8
 --- !u!54 &590275912418888669
 Rigidbody:
