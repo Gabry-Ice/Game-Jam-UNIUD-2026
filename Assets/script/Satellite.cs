@@ -10,16 +10,20 @@ public class Satellite : MonoBehaviour
     public Vector3 velocitaRotazione = new Vector3(0f, 90f, 45f);
 
     [Header("Sound")]
-    private Camera camera; // <-- solo dichiarazione, niente FindWithTag qui
     [SerializeField] AudioClip success;
-    [SerializeField][Range(0f, 1f)] float volumeEsplosione = 1f;
+    [SerializeField][Range(0f, 1f)] float volumeSuccesso = 1f;
 
     [HideInInspector]
     public SatelliteSpawner spawner;
 
+    private AudioSource audioSource;
+
     void Awake()
     {
-        camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>(); // <-- spostato qui
+        // Prende o aggiunge AudioSource sulla MainCamera
+        audioSource = Camera.main.GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = Camera.main.gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
@@ -39,7 +43,7 @@ public class Satellite : MonoBehaviour
                 spawner.OnCheckpointRaccolto();
 
             if (success != null)
-                AudioSource.PlayClipAtPoint(success, camera.transform.position, volumeEsplosione);
+                audioSource.PlayOneShot(success, volumeSuccesso);
 
             Destroy(gameObject);
         }
