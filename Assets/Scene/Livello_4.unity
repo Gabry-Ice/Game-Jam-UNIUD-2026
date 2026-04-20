@@ -734,7 +734,7 @@ MonoBehaviour:
   prefabAstronavi:
   - {fileID: 2586374905509860117, guid: 3a8514f410c9d474db6cc42e52006550, type: 3}
   - {fileID: 2586374905509860117, guid: 168dd9251711df649be4a09693cd3505, type: 3}
-  - {fileID: 2586374905509860117, guid: 997597213d06a9142813c26e65d44de7, type: 3}
+  - {fileID: 0}
   intervalloSpawn: 2
   raggioSpawn: 10
   nave: {fileID: 900753084}
