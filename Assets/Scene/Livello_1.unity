@@ -1290,8 +1290,51 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8696560814051754218, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1286628711}
   m_SourcePrefab: {fileID: 100100000, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
+--- !u!4 &1286628709 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7891523391895727698, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
+  m_PrefabInstance: {fileID: 1286628708}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1286628710 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8696560814051754218, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
+  m_PrefabInstance: {fileID: 1286628708}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1286628711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286628710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b34c505675b9f94bb75287a905dd2f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabAsteroidi:
+  - {fileID: 6043588751216293171, guid: 8ce4b4c8b7e4c254aa81948db7398d2c, type: 3}
+  - {fileID: 6043588751216293171, guid: 7ffb9af8ac36160469340d0008074f63, type: 3}
+  - {fileID: 6043588751216293171, guid: ac68396647a37114ca0e8269c0ee1ce4, type: 3}
+  prefabAstronavi:
+  - {fileID: 2586374905509860117, guid: 3a8514f410c9d474db6cc42e52006550, type: 3}
+  - {fileID: 2586374905509860117, guid: 168dd9251711df649be4a09693cd3505, type: 3}
+  - {fileID: 2586374905509860117, guid: 997597213d06a9142813c26e65d44de7, type: 3}
+  intervalloSpawn: 2
+  raggioSpawn: 10
+  nave: {fileID: 1286628709}
+  raggioDiSicurezza: 5
+  maxTentativi: 10
+  difficolta: 1
+  intervalloMinimo: 0.3
+  moltiplicatoreDifficolta: 0.1
+  maxOggettiSpaziali: 50
+  cameraPrincipale: {fileID: 0}
 --- !u!1 &1334815104
 GameObject:
   m_ObjectHideFlags: 0
@@ -1756,6 +1799,10 @@ PrefabInstance:
       propertyPath: cameraPrincipale
       value: 
       objectReference: {fileID: 862302559}
+    - target: {fileID: 1744365676079978647, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
+      propertyPath: attesaInizialePrimaDelPrimoSpawn
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 2338887927758833115, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
       propertyPath: m_Name
       value: checkpoint spawner

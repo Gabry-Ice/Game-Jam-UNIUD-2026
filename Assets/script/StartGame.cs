@@ -5,6 +5,6 @@ public class StartGame : MonoBehaviour
 {
     public void StartButton()
     {
-        SceneManager.LoadScene("prova");
+        SceneManager.LoadScene("LevelSelect");
     }
 }
