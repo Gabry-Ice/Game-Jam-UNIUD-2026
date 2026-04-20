@@ -1,3 +1,4 @@
+/*
 using UnityEngine;
 
 public class PrefabToSprite : MonoBehaviour
@@ -53,8 +54,8 @@ public class PrefabToSprite : MonoBehaviour
         nuovoOggetto.transform.position = transform.position;
 
         // Seleziona il nuovo oggetto nell'hierarchy
-        UnityEditor.Selection.activeGameObject = nuovoOggetto;
+        //UnityEditor.Selection.activeGameObject = nuovoOggetto;
 
         Debug.Log($"Creato nuovo GameObject: {nuovoOggetto.name}");
     }
-}
+}*/
