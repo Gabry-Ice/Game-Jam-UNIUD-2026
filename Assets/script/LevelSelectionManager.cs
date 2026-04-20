@@ -4,6 +4,8 @@ using UnityEngine.EventSystems;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+
 
 public class LevelSelectionManager : MonoBehaviour
 {
@@ -262,7 +264,9 @@ public class LevelSelectionManager : MonoBehaviour
     void OnLevelSelected(int levelNumber)
     {
         Debug.Log($"Livello {levelNumber} selezionato");
-        // Carica la scena (esempio)
-        // SceneManager.LoadScene("Level" + levelNumber);
+
+        SceneManager.LoadScene("Livello_" + levelNumber);
+
     }
+
 }
