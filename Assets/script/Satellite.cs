@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Satellite : MonoBehaviour
 {
@@ -15,7 +14,7 @@ public class Satellite : MonoBehaviour
 
     private Vector3 direzione;
     private Vector3 posizioneIniziale;
-    private bool puòEsserePreso = true;
+    private bool preso = false;
 
     void Start()
     {
@@ -23,12 +22,12 @@ public class Satellite : MonoBehaviour
 
         float angolo = Random.Range(0f, 360f) * Mathf.Deg2Rad;
         direzione = new Vector3(Mathf.Cos(angolo), 0f, Mathf.Sin(angolo)).normalized;
-
-        Debug.Log("🛸 Satellite attivo e visibile immediatamente");
     }
 
     void Update()
     {
+        if (preso) return;
+
         transform.position += direzione * velocita * Time.deltaTime;
         transform.Rotate(velocitaRotazione * Time.deltaTime);
 
@@ -40,17 +39,15 @@ public class Satellite : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!puòEsserePreso) return;
+        if (preso) return;
+        if (!other.CompareTag("Segnale")) return;
 
-        if (other.CompareTag("Segnale"))
-        {
-            puòEsserePreso = false;
-            Debug.Log($"🎯 Satellite ha toccato il segnale: {other.gameObject.name}");
+        preso = true;
+        Debug.Log($"🎯 Satellite preso da: {other.gameObject.name}");
 
-            if (spawner != null)
-                spawner.OnSatellitePreso(this);
+        if (spawner != null)
+            spawner.OnSatellitePreso();
 
-            Destroy(gameObject, 0.1f);
-        }
+        Destroy(gameObject, 0.1f);
     }
 }

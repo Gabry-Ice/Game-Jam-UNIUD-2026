@@ -2253,12 +2253,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1744365676079978647, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1744365676079978647, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
       propertyPath: testoAvviso
       value: 
       objectReference: {fileID: 964658206}
     - target: {fileID: 1744365676079978647, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
       propertyPath: maxSatelliti
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1744365676079978647, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
+      propertyPath: nomeScenaWin
+      value: FineGame
       objectReference: {fileID: 0}
     - target: {fileID: 1744365676079978647, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
       propertyPath: prefabSatellite
@@ -2270,7 +2278,7 @@ PrefabInstance:
       objectReference: {fileID: 862302559}
     - target: {fileID: 1744365676079978647, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
       propertyPath: attesaInizialePrimaDelPrimoSpawn
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2338887927758833115, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
       propertyPath: m_Name
@@ -2309,6 +2317,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: 8147055202043872548, guid: 7e60b79062aa9aa42b050e22099b1894, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4916fc1a65bb1764e9128babda3b2efa, type: 2}
     - target: {fileID: 8997257379906442623, guid: 7e60b79062aa9aa42b050e22099b1894, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

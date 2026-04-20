@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class SatelliteSpawner : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class SatelliteSpawner : MonoBehaviour
 
     [Header("Spawn")]
     public int maxSatelliti = 3;
-    public float attesaInizialePrimaDelPrimoSpawn = 3f; // 🔥 NUOVO: attesa prima del primo spawn
+    private float attesaIniziale = 30f;
     public float attesaDopoDistruzione = 5f;
 
     [Header("Area Spawn")]
@@ -23,16 +24,13 @@ public class SatelliteSpawner : MonoBehaviour
     public string messaggioAvviso = "CHECKPOINT IN ARRIVO!";
     public float durataAvviso = 3f;
 
-    [Header("Sconfitta")]
+    [Header("Scene")]
     public string nomeScenaPerdita = "LoseScreen";
-
-    [Header("Vittoria")]
-    public string nomeScenaWin = "WINscreen";
+    public string nomeScenaWin;
 
     private int satelliteSpawnati = 0;
-    private int satellitiPresi = 0;
     private bool partitaFinita = false;
-    private bool avvisoAttivo = false;
+    private GameObject satelliteCorrente = null;
 
     void Start()
     {
@@ -42,153 +40,102 @@ public class SatelliteSpawner : MonoBehaviour
         if (testoAvviso != null)
             testoAvviso.gameObject.SetActive(false);
 
-        // 🔥 NON SPAWNARE SUBITO, aspetta l'attesa iniziale
-        StartCoroutine(AttesaPrimaSpawn());
+        StartCoroutine(LoopSpawn());
     }
 
-    // 🔥 NUOVA COROUTINE: attesa prima del primo spawn
-    System.Collections.IEnumerator AttesaPrimaSpawn()
+    IEnumerator LoopSpawn()
     {
-        Debug.Log($"⏳ Attesa di {attesaInizialePrimaDelPrimoSpawn} secondi prima del primo spawn...");
-        yield return new WaitForSeconds(attesaInizialePrimaDelPrimoSpawn);
+        yield return new WaitForSeconds(attesaIniziale);
 
-        if (!partitaFinita)
+        while (!partitaFinita && satelliteSpawnati < maxSatelliti)
         {
-            Debug.Log("🎯 Primo spawn iniziato!");
             SpawnSatellite();
+
+            // Aspetta che il satellite corrente venga distrutto
+            yield return new WaitUntil(() => satelliteCorrente == null || partitaFinita);
+
+            if (partitaFinita) yield break;
+
+            // Satellite distrutto senza essere preso
+            Debug.Log($"💥 Satellite distrutto ({satelliteSpawnati}/{maxSatelliti})");
+
+            if (satelliteSpawnati >= maxSatelliti)
+            {
+                // Esauriti tutti i satelliti senza vittoria
+                StartCoroutine(CaricaScena(nomeScenaPerdita));
+                yield break;
+            }
+
+            yield return new WaitForSeconds(attesaDopoDistruzione);
         }
-    }
-
-    // Chiamato quando un satellite viene preso
-    public void OnSatellitePreso(Satellite satellite)
-    {
-        if (partitaFinita) return;
-
-        satellitiPresi++;
-        Debug.Log($"📊 Satellite preso! ({satellitiPresi}/{maxSatelliti})");
-
-        // 🔥 VITTORIA DOPO IL PRIMO SATELLITE
-        if (satellitiPresi >= 1)
-        {
-            Vittoria();
-        }
-    }
-
-    // Gestisce la vittoria
-    void Vittoria()
-    {
-        if (partitaFinita) return;
-
-        partitaFinita = true;
-        StopAllCoroutines();
-        NascondiAvviso();
-
-        Debug.Log("🏆 SATELLITE PRESO! VITTORIA!");
-
-        // Salva il livello attuale
-        string currentLevel = SceneManager.GetActiveScene().name;
-        PlayerPrefs.SetString("CurrentLevel", currentLevel);
-        PlayerPrefs.Save();
-
-        Debug.Log("Salvato livello: " + currentLevel);
-
-        // Vai alla scena di vittoria
-        SceneManager.LoadScene(nomeScenaWin);
     }
 
     void SpawnSatellite()
     {
-        if (partitaFinita) return;
-        if (satelliteSpawnati >= maxSatelliti) return;
         if (prefabSatellite == null) return;
 
-        Vector2 cerchio = Random.insideUnitCircle * raggioSpawn;
-        Vector3 posCasuale = transform.position + new Vector3(cerchio.x, 0f, cerchio.y);
+        Vector2 cerchio = Random.insideUnitCircle.normalized * raggioSpawn;
+        Vector3 posizione = transform.position + new Vector3(cerchio.x, 0f, cerchio.y);
 
-        GameObject obj = Instantiate(prefabSatellite, posCasuale, Quaternion.identity);
+        satelliteCorrente = Instantiate(prefabSatellite, posizione, Quaternion.identity);
+        satelliteSpawnati++;
 
-        Satellite sat = obj.GetComponent<Satellite>();
+        Satellite sat = satelliteCorrente.GetComponent<Satellite>();
         if (sat != null)
             sat.spawner = this;
 
-        satelliteSpawnati++;
+        Debug.Log($"🛸 Satellite {satelliteSpawnati}/{maxSatelliti} spawnato");
 
-        Debug.Log($"🛸 Satellite {satelliteSpawnati}/{maxSatelliti} spawnato!");
-
-        // Mostra l'avviso allo spawn
         MostraAvviso();
-
-        // Avvia il controllo per la visibilità
-        StartCoroutine(ControllaVisibilitaPrimaVolta(obj));
-        StartCoroutine(AttesaProssimoSpawn(obj));
+        StartCoroutine(AvvisoSeVisibile());
     }
 
-    System.Collections.IEnumerator ControllaVisibilitaPrimaVolta(GameObject satellite)
+    // Mostra l'avviso anche quando il satellite entra nel campo visivo
+    IEnumerator AvvisoSeVisibile()
     {
-        bool avvisoMostratoDaVisibilita = false;
-
-        while (satellite != null && !avvisoMostratoDaVisibilita && !partitaFinita)
+        while (satelliteCorrente != null && !partitaFinita)
         {
-            if (IsVisibile(satellite))
+            if (IsVisibile(satelliteCorrente))
             {
-                if (!avvisoAttivo)
-                {
-                    MostraAvviso();
-                }
-                avvisoMostratoDaVisibilita = true;
+                MostraAvviso();
+                yield break;
             }
             yield return null;
         }
     }
 
-    System.Collections.IEnumerator AttesaProssimoSpawn(GameObject satellite)
+    // Chiamato da Satellite.cs quando viene preso
+    public void OnSatellitePreso()
     {
-        // Aspetta che il satellite appena spawnato venga distrutto
-        while (satellite != null && !partitaFinita)
-            yield return null;
+        if (partitaFinita) return;
 
-        // Se la partita è finita, fermati
-        if (partitaFinita) yield break;
+        partitaFinita = true;
+        satelliteCorrente = null;
 
-        // Se il satellite è stato distrutto (non preso) e abbiamo raggiunto il limite
-        if (satelliteSpawnati >= maxSatelliti && satellitiPresi < 1)
-        {
-            Debug.Log($"❌ Nessun satellite preso su {maxSatelliti} spawn. Game Over!");
-            SceneManager.LoadScene(nomeScenaPerdita);
-            yield break;
-        }
+        StopAllCoroutines();
+        NascondiAvviso();
 
-        yield return new WaitForSeconds(attesaDopoDistruzione);
+        Debug.Log("🏆 VITTORIA!");
 
-        if (!partitaFinita && satelliteSpawnati < maxSatelliti)
-            SpawnSatellite();
+        string currentLevel = SceneManager.GetActiveScene().name;
+        PlayerPrefs.SetString("CurrentLevel", currentLevel);
+        PlayerPrefs.Save();
+
+        StartCoroutine(CaricaScena(nomeScenaWin));
     }
 
-    bool IsVisibile(GameObject obj)
+    IEnumerator CaricaScena(string nomeScena)
     {
-        if (cameraPrincipale == null || obj == null) return false;
-
-        Plane[] piani = GeometryUtility.CalculateFrustumPlanes(cameraPrincipale);
-        Renderer r = obj.GetComponent<Renderer>();
-        if (r != null)
-            return GeometryUtility.TestPlanesAABB(piani, r.bounds);
-
-        Vector3 viewPos = cameraPrincipale.WorldToViewportPoint(obj.transform.position);
-        return viewPos.x >= 0 && viewPos.x <= 1 &&
-               viewPos.y >= 0 && viewPos.y <= 1 &&
-               viewPos.z > 0;
+        yield return new WaitForSeconds(0.1f);
+        SceneManager.LoadScene(nomeScena);
     }
 
     void MostraAvviso()
     {
-        if (testoAvviso == null) return;
-        if (avvisoAttivo) return;
+        if (testoAvviso == null || testoAvviso.gameObject.activeSelf) return;
 
-        avvisoAttivo = true;
         testoAvviso.text = messaggioAvviso;
         testoAvviso.gameObject.SetActive(true);
-
-        Debug.Log($"📢 Avviso mostrato: {messaggioAvviso}");
 
         CancelInvoke(nameof(NascondiAvviso));
         Invoke(nameof(NascondiAvviso), durataAvviso);
@@ -198,9 +145,23 @@ public class SatelliteSpawner : MonoBehaviour
     {
         if (testoAvviso != null)
             testoAvviso.gameObject.SetActive(false);
+    }
 
-        avvisoAttivo = false;
-        Debug.Log("Avviso nascosto");
+    bool IsVisibile(GameObject obj)
+    {
+        if (cameraPrincipale == null || obj == null) return false;
+
+        Renderer r = obj.GetComponent<Renderer>();
+        if (r != null)
+        {
+            Plane[] piani = GeometryUtility.CalculateFrustumPlanes(cameraPrincipale);
+            return GeometryUtility.TestPlanesAABB(piani, r.bounds);
+        }
+
+        Vector3 viewPos = cameraPrincipale.WorldToViewportPoint(obj.transform.position);
+        return viewPos.x >= 0 && viewPos.x <= 1 &&
+               viewPos.y >= 0 && viewPos.y <= 1 &&
+               viewPos.z > 0;
     }
 
     void OnDrawGizmosSelected()

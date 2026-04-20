@@ -3,11 +3,19 @@ using UnityEngine.SceneManagement;
 
 public class LoseScreenManager : MonoBehaviour
 {
-    public string levelSceneName; // scena del livello da ricaricare
+    private string previousLevel; // scena del livello da ricaricare
 
-    public void Retry()
+    private void Start()
     {
-        SceneManager.LoadScene(levelSceneName);
+        previousLevel = PlayerPrefs.GetString("CurrentLevel");
+
+        Debug.Log("Win screen aperta da: " + previousLevel);
+    }
+
+    public void RetryLevel()
+    {
+        Debug.Log("Retry premuto");
+        SceneManager.LoadScene(previousLevel);
     }
 
     public void BackToMenu()
