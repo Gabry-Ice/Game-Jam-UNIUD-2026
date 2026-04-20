@@ -3,6 +3,7 @@ using UnityEngine;
 public class CollisioneNavetta : MonoBehaviour
 {
     [SerializeField] GameObject navetta;
+    [SerializeField] Camera camera;
     [SerializeField] AudioClip sfxEsplosione;
     [SerializeField] GameObject prefabEsplosione;
     [SerializeField] float ritardoDistruzione = 1f;
@@ -30,7 +31,7 @@ public class CollisioneNavetta : MonoBehaviour
             Instantiate(prefabEsplosione, navetta.transform.position, navetta.transform.rotation);
 
         if (sfxEsplosione != null)
-            AudioSource.PlayClipAtPoint(sfxEsplosione, navetta.transform.position, volumeEsplosione); // <-- volume applicato
+            AudioSource.PlayClipAtPoint(sfxEsplosione, camera.transform.position, volumeEsplosione); // <-- volume applicato
 
         navetta.SetActive(false);
         yield return new WaitForSeconds(ritardoDistruzione);
