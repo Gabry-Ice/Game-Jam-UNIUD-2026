@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Satellite : MonoBehaviour
 {
@@ -9,6 +9,9 @@ public class Satellite : MonoBehaviour
     [Header("Rotazione")]
     public Vector3 velocitaRotazione = new Vector3(0f, 90f, 45f);
 
+    [HideInInspector]
+    public SatelliteSpawner spawner; // assegnato dallo spawner al momento dell'instantiate
+
     void Update()
     {
         transform.position += Vector3.down * velocitaDiscesa * Time.deltaTime;
@@ -16,5 +19,16 @@ public class Satellite : MonoBehaviour
 
         if (transform.position.y < altezzaMinima)
             Destroy(gameObject);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            if (spawner != null)
+                spawner.OnCheckpointRaccolto();
+
+            Destroy(gameObject);
+        }
     }
 }

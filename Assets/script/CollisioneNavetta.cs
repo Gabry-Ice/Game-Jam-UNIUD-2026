@@ -6,6 +6,7 @@ public class CollisioneNavetta : MonoBehaviour
     [SerializeField] AudioClip sfxEsplosione;
     [SerializeField] GameObject prefabEsplosione;
     [SerializeField] float ritardoDistruzione = 1f;
+    [SerializeField][Range(0f, 1f)] float volumeEsplosione = 10f; // <-- nuovo campo
 
     private void OnTriggerEnter(Collider collision)
     {
@@ -15,23 +16,24 @@ public class CollisioneNavetta : MonoBehaviour
         {
             StartCoroutine(EsplodiNavetta());
         }
+        else if (collision.gameObject.CompareTag("Satellite"))
+        {
+            Destroy(collision.gameObject);
+            Destroy(navetta);
+            Debug.Log("Hai raggiunto il checkpoint!");
+        }
     }
 
     private System.Collections.IEnumerator EsplodiNavetta()
     {
-        // Istanzia il prefab esplosione nella posizione della navetta
         if (prefabEsplosione != null)
             Instantiate(prefabEsplosione, navetta.transform.position, navetta.transform.rotation);
 
-        // Riproduci il suono
         if (sfxEsplosione != null)
-            AudioSource.PlayClipAtPoint(sfxEsplosione, navetta.transform.position);
+            AudioSource.PlayClipAtPoint(sfxEsplosione, navetta.transform.position, volumeEsplosione); // <-- volume applicato
 
-        // Nascondi subito la navetta mentre aspetti
         navetta.SetActive(false);
-
         yield return new WaitForSeconds(ritardoDistruzione);
-
         Destroy(navetta);
     }
 }

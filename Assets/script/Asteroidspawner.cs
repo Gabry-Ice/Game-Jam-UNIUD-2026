@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class AsteroidSpawner : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class AsteroidSpawner : MonoBehaviour
 
     [Header("Spawn")]
     public float intervalloSpawn = 2f;
-    public float raggioSpawn = 10f;      // quanto fuori dalla telecamera spawnare
+    public float raggioSpawn = 10f;
 
     [Header("Sicurezza")]
     public Transform nave;
@@ -22,11 +23,15 @@ public class AsteroidSpawner : MonoBehaviour
     public float intervalloMinimo = 0.3f;
     public float moltiplicatoreDifficolta = 0.1f;
 
+    [Header("Gestione Memoria")]
+    public int maxOggettiSpaziali = 50;
+
     [Header("Riferimenti")]
     public Camera cameraPrincipale;
 
     float timer;
     float intervalloCorrente;
+    Queue<GameObject> oggettiSpawnati = new Queue<GameObject>();
 
     void Start()
     {
@@ -65,7 +70,6 @@ public class AsteroidSpawner : MonoBehaviour
     {
         float distanza = Mathf.Abs(cameraPrincipale.transform.position.y - nave.position.y);
 
-        // calcola i bordi della camera in world space
         Vector3 bottomLeft = cameraPrincipale.ViewportToWorldPoint(new Vector3(0, 0, distanza));
         Vector3 topRight = cameraPrincipale.ViewportToWorldPoint(new Vector3(1, 1, distanza));
 
@@ -74,25 +78,24 @@ public class AsteroidSpawner : MonoBehaviour
         float minZ = bottomLeft.z;
         float maxZ = topRight.z;
 
-        // scegli uno dei 4 lati casualmente
         int lato = Random.Range(0, 4);
         float x, z;
 
         switch (lato)
         {
-            case 0: // sinistra
+            case 0:
                 x = minX - Random.Range(1f, raggioSpawn);
                 z = Random.Range(minZ, maxZ);
                 break;
-            case 1: // destra
+            case 1:
                 x = maxX + Random.Range(1f, raggioSpawn);
                 z = Random.Range(minZ, maxZ);
                 break;
-            case 2: // basso
+            case 2:
                 x = Random.Range(minX, maxX);
                 z = minZ - Random.Range(1f, raggioSpawn);
                 break;
-            default: // alto
+            default:
                 x = Random.Range(minX, maxX);
                 z = maxZ + Random.Range(1f, raggioSpawn);
                 break;
@@ -103,15 +106,9 @@ public class AsteroidSpawner : MonoBehaviour
 
     void SpawnAsteroide()
     {
-        Debug.Log("Spawnato asteroide");
-
         GameObject[] pool = Random.value > 0.5f ? prefabAsteroidi : prefabAstronavi;
 
-        if (pool.Length == 0)
-        {
-            Debug.Log("Pool vuoto");
-            return;
-        }
+        if (pool.Length == 0) return;
 
         int indice = Random.Range(0, pool.Length);
         GameObject prefab = pool[indice];
@@ -121,17 +118,30 @@ public class AsteroidSpawner : MonoBehaviour
         for (int i = 0; i < maxTentativi; i++)
         {
             Vector3 spawnPos = GetPosizioneeFuoriCamera();
-            float distanza = nave == null ? -1f : Vector3.Distance(spawnPos, nave.position);
-            Debug.Log($"Tentativo {i}: posizione {spawnPos}, distanza nave {distanza}");
 
             if (nave == null || Vector3.Distance(spawnPos, nave.position) >= raggioDiSicurezza)
             {
-                Debug.Log($"Spawn riuscito in {spawnPos}");
-                Instantiate(prefab, spawnPos, Quaternion.identity);
+                Vector3 posizioneTarget = nave.position;
+                Vector3 direzioneViaggio = (posizioneTarget - spawnPos);
+                direzioneViaggio.y = 0;
+                direzioneViaggio.Normalize();
+
+                Quaternion rotazioneVersoIlGiocatore = Quaternion.LookRotation(direzioneViaggio);
+
+                GameObject nuovoOggetto = Instantiate(prefab, spawnPos, rotazioneVersoIlGiocatore);
+                oggettiSpawnati.Enqueue(nuovoOggetto);
+
+                if (oggettiSpawnati.Count > maxOggettiSpaziali)
+                {
+                    GameObject oggettoVecchio = oggettiSpawnati.Dequeue();
+                    if (oggettoVecchio != null)
+                    {
+                        Destroy(oggettoVecchio);
+                    }
+                }
+
                 return;
             }
         }
-
-        Debug.Log("Spawn saltato: nessuna posizione libera trovata.");
     }
 }

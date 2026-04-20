@@ -3,11 +3,25 @@ using UnityEngine.InputSystem;
 
 public class CubeMovement : MonoBehaviour
 {
-    private Vector2 moveInput;
-    public float speed = 10f;
+    [Header("Movimento")]
+    public float velocita = 5f;
     public float velocitaRotazione = 10f;
+
+    [Header("Boost")]
+    public float velocitaBoost = 15f;
+    public float moltiplicatoreBoost = 2f; // <-- nuovo campo
+    public float durataBoost = 0.2f;
+    public float tempoRicarica = 3f;
+
+    [Header("Bordi")]
+    public float offsetBordo = 1f;
     public Camera cameraPrincipale;
-    public float offsetBordo = 0f;  // Offset di 10 unità dai bordi
+
+    private Vector2 moveInput;
+    private float timerBoost = 0f;
+    private float timerRicarica = 0f;
+    private bool boostDisponibile = true;
+    private Vector3 direzioneBoost;
 
     void Start()
     {
@@ -20,16 +34,48 @@ public class CubeMovement : MonoBehaviour
         moveInput = value.Get<Vector2>();
     }
 
+    void OnJump(InputValue value)
+    {
+        if (value.isPressed && boostDisponibile)
+        {
+            Vector3 dir = new Vector3(moveInput.x, 0f, moveInput.y);
+            if (dir == Vector3.zero)
+                dir = transform.forward;
+
+            direzioneBoost = dir.normalized;
+            timerBoost = durataBoost;
+            boostDisponibile = false;
+            timerRicarica = tempoRicarica;
+        }
+    }
+
     void Update()
     {
-        Vector3 movement = new Vector3(moveInput.x, 0, moveInput.y);
-
-        transform.position += movement * speed * Time.deltaTime;
-        transform.position = ClampAllaBordoCamera(transform.position);
-
-        if (movement != Vector3.zero)
+        if (!boostDisponibile)
         {
-            Quaternion rotazioneTarget = Quaternion.LookRotation(movement);
+            timerRicarica -= Time.deltaTime;
+            if (timerRicarica <= 0f)
+                boostDisponibile = true;
+        }
+
+        Vector3 movimento = new Vector3(moveInput.x, 0f, moveInput.y);
+
+        if (timerBoost > 0f)
+        {
+            // velocitaBoost moltiplicata per il moltiplicatore impostato nell'editor
+            transform.position += direzioneBoost * velocitaBoost * moltiplicatoreBoost * Time.deltaTime;
+            timerBoost -= Time.deltaTime;
+        }
+        else
+        {
+            transform.position += movimento * velocita * Time.deltaTime;
+        }
+
+        transform.position = ClampAiBordi(transform.position);
+
+        if (movimento != Vector3.zero)
+        {
+            Quaternion rotazioneTarget = Quaternion.LookRotation(movimento);
             transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 rotazioneTarget,
@@ -38,18 +84,20 @@ public class CubeMovement : MonoBehaviour
         }
     }
 
-    Vector3 ClampAllaBordoCamera(Vector3 posizione)
+    Vector3 ClampAiBordi(Vector3 posizione)
     {
         if (cameraPrincipale == null) return posizione;
 
-        // Calcola i limiti della telecamera in unità mondiali
-        float cameraHeight = 2f * cameraPrincipale.orthographicSize;
-        float cameraWidth = cameraHeight * cameraPrincipale.aspect;
+        float distanza = Mathf.Abs(cameraPrincipale.transform.position.y - posizione.y);
+        Vector3 minBounds = cameraPrincipale.ViewportToWorldPoint(new Vector3(0, 0, distanza));
+        Vector3 maxBounds = cameraPrincipale.ViewportToWorldPoint(new Vector3(1, 1, distanza));
 
-        // Limita la posizione del player in base all'offset
-        float limitX = Mathf.Clamp(posizione.x, cameraPrincipale.transform.position.x - cameraWidth + offsetBordo, cameraPrincipale.transform.position.x + cameraWidth - offsetBordo);
-        float limitZ = Mathf.Clamp(posizione.z, cameraPrincipale.transform.position.z - cameraHeight + offsetBordo, cameraPrincipale.transform.position.z + cameraHeight - offsetBordo);
+        posizione.x = Mathf.Clamp(posizione.x, minBounds.x + offsetBordo, maxBounds.x - offsetBordo);
+        posizione.z = Mathf.Clamp(posizione.z, minBounds.z + offsetBordo, maxBounds.z - offsetBordo);
 
-        return new Vector3(limitX, posizione.y, limitZ);
+        return posizione;
     }
+
+    public bool BoostDisponibile => boostDisponibile;
+    public float ProgressoRicarica => 1f - (timerRicarica / tempoRicarica);
 }

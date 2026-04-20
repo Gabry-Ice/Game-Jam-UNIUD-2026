@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 public class SatelliteSpawner : MonoBehaviour
@@ -12,7 +12,7 @@ public class SatelliteSpawner : MonoBehaviour
 
     [Header("Spawn")]
     public int maxSatelliti = 3;
-    public float attesaDopoDistruzione = 5f;  // secondi dopo la distruzione del satellite
+    public float attesaDopoDistruzione = 5f;
 
     [Header("Area Spawn")]
     public float raggioX = 10f;
@@ -24,6 +24,7 @@ public class SatelliteSpawner : MonoBehaviour
     public float durataAvviso = 3f;
 
     int satelliteSpawnati = 0;
+    bool checkpointPreso = false;
 
     void Start()
     {
@@ -33,22 +34,41 @@ public class SatelliteSpawner : MonoBehaviour
         if (testoAvviso != null)
             testoAvviso.gameObject.SetActive(false);
 
-        // spawna il primo subito
         SpawnSatellite();
+    }
+
+    public void OnCheckpointRaccolto()
+    {
+        checkpointPreso = true;
+        StopAllCoroutines(); // ← ferma TUTTO immediatamente
+        NascondiAvviso();
+        Debug.Log("Checkpoint preso – nessun altro spawn.");
     }
 
     void SpawnSatellite()
     {
+        if (checkpointPreso) return;
         if (satelliteSpawnati >= maxSatelliti) return;
         if (prefabSatellite == null) return;
+        if (cameraPrincipale == null) return;
 
-        Vector3 posCasuale = new Vector3(
-            transform.position.x + Random.Range(-raggioX, raggioX),
-            altezzaSpawn,
-            transform.position.z + Random.Range(-raggioZ, raggioZ)
+        float distanza = Mathf.Abs(cameraPrincipale.transform.position.y - altezzaSpawn);
+        Vector3 puntoViewport = new Vector3(
+            Random.Range(0.1f, 0.9f),
+            Random.Range(0.1f, 0.9f),
+            distanza
         );
 
+        Vector3 posCasuale = cameraPrincipale.ViewportToWorldPoint(puntoViewport);
+        posCasuale.y = altezzaSpawn;
+
         GameObject obj = Instantiate(prefabSatellite, posCasuale, Quaternion.identity);
+
+        // Passa il riferimento diretto allo spawner al satellite
+        Satellite sat = obj.GetComponent<Satellite>();
+        if (sat != null)
+            sat.spawner = this;
+
         satelliteSpawnati++;
 
         StartCoroutine(ControllVisibilita(obj));
@@ -57,14 +77,15 @@ public class SatelliteSpawner : MonoBehaviour
 
     System.Collections.IEnumerator AttesaProssimoSpawn(GameObject satellite)
     {
-        // aspetta che il satellite venga distrutto
         while (satellite != null)
             yield return null;
 
-        // aspetta 5 secondi dopo la distruzione
+        if (checkpointPreso) yield break;
+
         yield return new WaitForSeconds(attesaDopoDistruzione);
 
-        SpawnSatellite();
+        if (!checkpointPreso)
+            SpawnSatellite();
     }
 
     System.Collections.IEnumerator ControllVisibilita(GameObject satellite)
@@ -101,10 +122,8 @@ public class SatelliteSpawner : MonoBehaviour
     void MostraAvviso()
     {
         if (testoAvviso == null) return;
-
         testoAvviso.text = messaggioAvviso;
         testoAvviso.gameObject.SetActive(true);
-
         CancelInvoke(nameof(NascondiAvviso));
         Invoke(nameof(NascondiAvviso), durataAvviso);
     }

@@ -205,10 +205,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0285d0d3e767adf4a87062903e5ffcd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  velocita: 5
   velocitaRotazione: 10
-  cameraPrincipale: {fileID: 0}
+  velocitaBoost: 15
+  moltiplicatoreBoost: 2
+  durataBoost: 0.2
+  tempoRicarica: 3
   offsetBordo: 0.05
+  cameraPrincipale: {fileID: 0}
 --- !u!1 &8696560814051754218
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,6 +339,7 @@ MonoBehaviour:
   sfxEsplosione: {fileID: 8300000, guid: cffca233f5201b64db45e1c401aa8ab0, type: 3}
   prefabEsplosione: {fileID: 191186, guid: 079954accd64b32419ec069129c81273, type: 3}
   ritardoDistruzione: 1
+  volumeEsplosione: 1
 --- !u!54 &1474696074551613569
 Rigidbody:
   m_ObjectHideFlags: 0
