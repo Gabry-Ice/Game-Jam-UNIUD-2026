@@ -168,6 +168,18 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 5635461238103122234, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
+      propertyPath: m_Size.y
+      value: 5.9816265
+      objectReference: {fileID: 0}
+    - target: {fileID: 5635461238103122234, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
+      propertyPath: m_Center.x
+      value: -1.0869317
+      objectReference: {fileID: 0}
+    - target: {fileID: 5635461238103122234, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
+      propertyPath: m_Center.y
+      value: 2.4908133
+      objectReference: {fileID: 0}
+    - target: {fileID: 5635461238103122234, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
@@ -320,6 +332,7 @@ GameObject:
   m_Component:
   - component: {fileID: 174927246}
   - component: {fileID: 174927245}
+  - component: {fileID: 174927247}
   m_Layer: 0
   m_Name: Stars-Big_1
   m_TagString: Untagged
@@ -397,6 +410,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &174927247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174927244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e62c272a5adbe343998ce1df66e5a42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oggettiDaCiclo:
+  - {fileID: 1596689632}
+  - {fileID: 174927244}
+  - {fileID: 594485892}
+  - {fileID: 275717638}
+  - {fileID: 929520675}
+  - {fileID: 1225221847}
+  - {fileID: 305280709}
+  - {fileID: 1715840505}
+  - {fileID: 1362490729}
+  - {fileID: 336198888}
+  - {fileID: 2080898371}
+  velocita: 5
+  limiteFineX: 127
+  rientroMinX: -150
+  rientroMaxX: -400
 --- !u!114 &235207214 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4289074927910645842, guid: 7e60b79062aa9aa42b050e22099b1894, type: 3}
@@ -2252,8 +2293,8 @@ SceneRoots:
   - {fileID: 946132199}
   - {fileID: 1334815106}
   - {fileID: 966568747}
-  - {fileID: 174927246}
   - {fileID: 1596689634}
+  - {fileID: 174927246}
   - {fileID: 594485894}
   - {fileID: 275717640}
   - {fileID: 929520677}
