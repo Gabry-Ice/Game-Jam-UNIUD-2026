@@ -6,8 +6,8 @@ public class Asteroide : MonoBehaviour
     public float velocitaMin = 2f;
     public float velocitaMax = 6f;
 
-    [Header("Durata")]
-    public float durata = 5f;
+    [Header("Durata Massima")]
+    public float durataFailsafe = 10f; // Distrugge comunque dopo 10s se non esce mai
 
     private GameObject target;
     Vector3 direzione;
@@ -21,19 +21,19 @@ public class Asteroide : MonoBehaviour
         {
             Vector3 direzioneVersoTarget = (target.transform.position - transform.position).normalized;
             float variazioneAngolo = Random.Range(-30f, 30f);
+            // Uso Quaternion.Euler(0, variazioneAngolo, 0) se il gioco è sul piano XZ (3D)
+            // Se il gioco è 2D (piano XY), usa (0, 0, variazioneAngolo)
             direzione = Quaternion.Euler(0, variazioneAngolo, 0) * direzioneVersoTarget;
         }
         else
         {
-            float x = Random.Range(-1f, 1f);
-            float z = Random.Range(-1f, 1f);
-            direzione = new Vector3(x, 0f, z).normalized;
+            direzione = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized;
         }
 
         velocita = Random.Range(velocitaMin, velocitaMax);
 
-        // Manteniamo il timer di sicurezza (opzionale)
-        Destroy(gameObject, durata);
+        // Distruzione di sicurezza se l'asteroide si incastra o non esce mai
+        Destroy(gameObject, durataFailsafe);
     }
 
     void Update()
@@ -41,10 +41,9 @@ public class Asteroide : MonoBehaviour
         transform.position += direzione * velocita * Time.deltaTime;
     }
 
-    // --- NUOVA LOGICA: AUTO-DISTRUZIONE FUORI CAMPO ---
+    // Chiamata da Unity quando l'oggetto esce da TUTTE le telecamere (inclusa la Scene View!)
     private void OnBecameInvisible()
     {
-        // Si distrugge non appena esce dal POV della telecamera
         Destroy(gameObject);
     }
 }
