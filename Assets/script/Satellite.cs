@@ -2,48 +2,83 @@
 
 public class Satellite : MonoBehaviour
 {
-    [Header("Discesa")]
-    public float velocitaDiscesa = 3f;
-    public float altezzaMinima = -10f;
+    [Header("Movimento")]
+    public float velocita = 3f;
+    public float raggioMassimo = 15f;
+    public float ritardoVisibilita = 1; // Tempo dopo il quale diventa visibile
 
     [Header("Rotazione")]
     public Vector3 velocitaRotazione = new Vector3(0f, 90f, 45f);
 
-    [Header("Sound")]
-    [SerializeField] AudioClip success;
-    [SerializeField][Range(0f, 1f)] float volumeSuccesso = 1f;
-
     [HideInInspector]
     public SatelliteSpawner spawner;
 
-    private AudioSource audioSource;
+    private Vector3 direzione;
+    private Vector3 posizioneIniziale;
+    private bool inMovimento = false;
+    private Renderer objectRenderer;
+    private Collider objectCollider;
 
-    void Awake()
+    void Start()
     {
-        // Prende o aggiunge AudioSource sulla MainCamera
-        audioSource = Camera.main.GetComponent<AudioSource>();
-        if (audioSource == null)
-            audioSource = Camera.main.gameObject.AddComponent<AudioSource>();
+        posizioneIniziale = transform.position;
+
+        float angolo = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+        direzione = new Vector3(Mathf.Cos(angolo), 0f, Mathf.Sin(angolo)).normalized;
+
+        // Ottieni i componenti
+        objectRenderer = GetComponent<Renderer>();
+        objectCollider = GetComponent<Collider>();
+
+        // Nascondi il satellite all'inizio
+        if (objectRenderer != null)
+            objectRenderer.enabled = false;
+
+        if (objectCollider != null)
+            objectCollider.enabled = false;
+
+        // Rendi visibile dopo il ritardo
+        Invoke(nameof(RendiVisibile), ritardoVisibilita);
+
+        // Avvia il movimento dopo il ritardo
+        Invoke(nameof(AvviaMovimento), ritardoVisibilita);
+    }
+
+    void RendiVisibile()
+    {
+        if (objectRenderer != null)
+            objectRenderer.enabled = true;
+
+        if (objectCollider != null)
+            objectCollider.enabled = true;
+
+        Debug.Log($"Satellite {gameObject.name} ora visibile!");
+    }
+
+    void AvviaMovimento()
+    {
+        inMovimento = true;
     }
 
     void Update()
     {
-        transform.position += Vector3.down * velocitaDiscesa * Time.deltaTime;
+        if (!inMovimento) return;
+
+        transform.position += direzione * velocita * Time.deltaTime;
         transform.Rotate(velocitaRotazione * Time.deltaTime);
 
-        if (transform.position.y < altezzaMinima)
-            Destroy(gameObject);
+        Vector3 delta = transform.position - posizioneIniziale;
+        delta.y = 0f;
+        if (delta.magnitude >= raggioMassimo)
+            direzione = -direzione;
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Segnale"))
         {
             if (spawner != null)
                 spawner.OnCheckpointRaccolto();
-
-            if (success != null)
-                audioSource.PlayOneShot(success, volumeSuccesso);
 
             Destroy(gameObject);
         }

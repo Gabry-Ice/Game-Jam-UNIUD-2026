@@ -15,9 +15,7 @@ public class SatelliteSpawner : MonoBehaviour
     public float attesaDopoDistruzione = 5f;
 
     [Header("Area Spawn")]
-    public float raggioX = 10f;
-    public float raggioZ = 10f;
-    public float altezzaSpawn = 20f;
+    public float raggioSpawn = 10f; // distanza massima dal GameObject vuoto
 
     [Header("Avviso")]
     public string messaggioAvviso = "CHECKPOINT IN ARRIVO!";
@@ -40,7 +38,7 @@ public class SatelliteSpawner : MonoBehaviour
     public void OnCheckpointRaccolto()
     {
         checkpointPreso = true;
-        StopAllCoroutines(); // ← ferma TUTTO immediatamente
+        StopAllCoroutines();
         NascondiAvviso();
         Debug.Log("Checkpoint preso – nessun altro spawn.");
     }
@@ -50,27 +48,18 @@ public class SatelliteSpawner : MonoBehaviour
         if (checkpointPreso) return;
         if (satelliteSpawnati >= maxSatelliti) return;
         if (prefabSatellite == null) return;
-        if (cameraPrincipale == null) return;
 
-        float distanza = Mathf.Abs(cameraPrincipale.transform.position.y - altezzaSpawn);
-        Vector3 puntoViewport = new Vector3(
-            Random.Range(0.1f, 0.9f),
-            Random.Range(0.1f, 0.9f),
-            distanza
-        );
-
-        Vector3 posCasuale = cameraPrincipale.ViewportToWorldPoint(puntoViewport);
-        posCasuale.y = altezzaSpawn;
+        // Punto casuale nel raggio attorno al GameObject vuoto
+        Vector2 cerchio = Random.insideUnitCircle * raggioSpawn;
+        Vector3 posCasuale = transform.position + new Vector3(cerchio.x, 0f, cerchio.y);
 
         GameObject obj = Instantiate(prefabSatellite, posCasuale, Quaternion.identity);
 
-        // Passa il riferimento diretto allo spawner al satellite
         Satellite sat = obj.GetComponent<Satellite>();
         if (sat != null)
             sat.spawner = this;
 
         satelliteSpawnati++;
-
         StartCoroutine(ControllVisibilita(obj));
         StartCoroutine(AttesaProssimoSpawn(obj));
     }
@@ -91,7 +80,6 @@ public class SatelliteSpawner : MonoBehaviour
     System.Collections.IEnumerator ControllVisibilita(GameObject satellite)
     {
         bool avvisoMostrato = false;
-
         while (satellite != null && !avvisoMostrato)
         {
             if (IsVisibile(satellite))
@@ -109,7 +97,6 @@ public class SatelliteSpawner : MonoBehaviour
 
         Plane[] piani = GeometryUtility.CalculateFrustumPlanes(cameraPrincipale);
         Renderer r = obj.GetComponent<Renderer>();
-
         if (r != null)
             return GeometryUtility.TestPlanesAABB(piani, r.bounds);
 
@@ -132,5 +119,12 @@ public class SatelliteSpawner : MonoBehaviour
     {
         if (testoAvviso != null)
             testoAvviso.gameObject.SetActive(false);
+    }
+
+    // Mostra il raggio nell'editor come sfera wireframe
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, raggioSpawn);
     }
 }

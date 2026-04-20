@@ -62,35 +62,16 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 856cb818722545148abdbaf32b46b7cb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8704054042141246202}
+      addedObject: {fileID: 2990863870253134426}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 856cb818722545148abdbaf32b46b7cb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2990863870253134426}
+      addedObject: {fileID: 8704054042141246202}
   m_SourcePrefab: {fileID: 100100000, guid: 856cb818722545148abdbaf32b46b7cb, type: 3}
 --- !u!1 &2184015252416742320 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 856cb818722545148abdbaf32b46b7cb, type: 3}
   m_PrefabInstance: {fileID: 1337084879486648033}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8704054042141246202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2184015252416742320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09e8ca407c8e5384a8357eeb014cf3c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocitaDiscesa: 7
-  altezzaMinima: -10
-  velocitaRotazione: {x: 0, y: 90, z: 0}
-  camera: {fileID: 0}
-  success: {fileID: 8300000, guid: 74cab60b877c0974485db1ec63420882, type: 3}
-  volumeEsplosione: 1
-  spawner: {fileID: 0}
 --- !u!65 &2990863870253134426
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -112,3 +93,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.233179, y: 3.0445251, z: 1.717706}
   m_Center: {x: 0.0010581017, y: 1.5222626, z: 0.1300087}
+--- !u!114 &8704054042141246202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2184015252416742320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e8ca407c8e5384a8357eeb014cf3c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocita: 7
+  raggioMassimo: 20
+  ritardoAvvio: 8
+  ritardoVisibilita: 8
+  velocitaRotazione: {x: 0, y: 90, z: 0}
+  spawner: {fileID: 0}

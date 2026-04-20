@@ -343,6 +343,8 @@ MonoBehaviour:
   prefabEsplosione: {fileID: 191186, guid: 079954accd64b32419ec069129c81273, type: 3}
   ritardoDistruzione: 1
   volumeEsplosione: 1
+  sfxEsplosioneAsteroide: {fileID: 0}
+  prefabEsplosioneAsteroide: {fileID: 0}
 --- !u!54 &1474696074551613569
 Rigidbody:
   m_ObjectHideFlags: 0
