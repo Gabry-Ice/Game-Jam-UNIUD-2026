@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; // 🔥 AGGIUNTO
+using UnityEngine.SceneManagement;
 
 public class SatelliteSpawner : MonoBehaviour
 {
@@ -23,10 +23,11 @@ public class SatelliteSpawner : MonoBehaviour
     public float durataAvviso = 3f;
 
     [Header("Sconfitta")]
-    public string nomeScenaPerdita = "LoseScreen"; // Il nome della tua scena di Game Over
+    public string nomeScenaPerdita = "LoseScreen";
 
     int satelliteSpawnati = 0;
     bool checkpointPreso = false;
+    bool avvisoAttivo = false;
 
     void Start()
     {
@@ -46,23 +47,18 @@ public class SatelliteSpawner : MonoBehaviour
         NascondiAvviso();
         Debug.Log("Checkpoint preso – nessun altro spawn.");
 
-        // 🔥 SALVA IL LIVELLO ATTUALE
         string currentLevel = SceneManager.GetActiveScene().name;
         PlayerPrefs.SetString("CurrentLevel", currentLevel);
 
         Debug.Log("Salvato livello: " + currentLevel);
 
-        // 🔥 VAI ALLA WIN SCREEN
         SceneManager.LoadScene("WINscreen");
     }
 
     void SpawnSatellite()
     {
         if (checkpointPreso) return;
-
-        // Se abbiamo già spawnato il numero massimo, non ne creiamo altri
         if (satelliteSpawnati >= maxSatelliti) return;
-
         if (prefabSatellite == null) return;
 
         Vector2 cerchio = Random.insideUnitCircle * raggioSpawn;
@@ -75,8 +71,33 @@ public class SatelliteSpawner : MonoBehaviour
             sat.spawner = this;
 
         satelliteSpawnati++;
-        StartCoroutine(ControllVisibilita(obj));
+
+        // 🔥 MOSTRA L'AVVISO ALLO SPAWN
+        MostraAvviso();
+
+        // 🔥 AVVIA IL CONTROLLO PER LA VISIBILITÀ (per mostrarlo di nuovo se necessario)
+        StartCoroutine(ControllaVisibilitaPrimaVolta(obj));
         StartCoroutine(AttesaProssimoSpawn(obj));
+    }
+
+    // 🔥 NUOVA COROUTINE: controlla la visibilità solo una volta
+    System.Collections.IEnumerator ControllaVisibilitaPrimaVolta(GameObject satellite)
+    {
+        bool avvisoMostratoDaVisibilita = false;
+
+        while (satellite != null && !avvisoMostratoDaVisibilita)
+        {
+            if (IsVisibile(satellite))
+            {
+                // Mostra l'avviso se non è già attivo
+                if (!avvisoAttivo)
+                {
+                    MostraAvviso();
+                }
+                avvisoMostratoDaVisibilita = true;
+            }
+            yield return null;
+        }
     }
 
     System.Collections.IEnumerator AttesaProssimoSpawn(GameObject satellite)
@@ -102,20 +123,6 @@ public class SatelliteSpawner : MonoBehaviour
             SpawnSatellite();
     }
 
-    System.Collections.IEnumerator ControllVisibilita(GameObject satellite)
-    {
-        bool avvisoMostrato = false;
-        while (satellite != null && !avvisoMostrato)
-        {
-            if (IsVisibile(satellite))
-            {
-                avvisoMostrato = true;
-                MostraAvviso();
-            }
-            yield return null;
-        }
-    }
-
     bool IsVisibile(GameObject obj)
     {
         if (cameraPrincipale == null || obj == null) return false;
@@ -134,8 +141,15 @@ public class SatelliteSpawner : MonoBehaviour
     void MostraAvviso()
     {
         if (testoAvviso == null) return;
+        if (avvisoAttivo) return;
+
+        avvisoAttivo = true;
         testoAvviso.text = messaggioAvviso;
         testoAvviso.gameObject.SetActive(true);
+
+        Debug.Log($"📢 Avviso mostrato (spawn o visibilità): {messaggioAvviso}");
+
+        // Annulla eventuali invoke precedenti
         CancelInvoke(nameof(NascondiAvviso));
         Invoke(nameof(NascondiAvviso), durataAvviso);
     }
@@ -144,6 +158,9 @@ public class SatelliteSpawner : MonoBehaviour
     {
         if (testoAvviso != null)
             testoAvviso.gameObject.SetActive(false);
+
+        avvisoAttivo = false;
+        Debug.Log("Avviso nascosto");
     }
 
     void OnDrawGizmosSelected()
