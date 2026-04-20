@@ -9,14 +9,18 @@ public class Satellite : MonoBehaviour
     [Header("Rotazione")]
     public Vector3 velocitaRotazione = new Vector3(0f, 90f, 45f);
 
-
     [Header("Sound")]
-    [SerializeField] Camera camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+    private Camera camera; // <-- solo dichiarazione, niente FindWithTag qui
     [SerializeField] AudioClip success;
-    [SerializeField][Range(0f, 1f)] float volumeEsplosione = 10f;
+    [SerializeField][Range(0f, 1f)] float volumeEsplosione = 1f;
 
     [HideInInspector]
-    public SatelliteSpawner spawner; // assegnato dallo spawner al momento dell'instantiate
+    public SatelliteSpawner spawner;
+
+    void Awake()
+    {
+        camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>(); // <-- spostato qui
+    }
 
     void Update()
     {
@@ -34,9 +38,9 @@ public class Satellite : MonoBehaviour
             if (spawner != null)
                 spawner.OnCheckpointRaccolto();
 
-
             if (success != null)
-                AudioSource.PlayClipAtPoint(success, camera.transform.position, volumeEsplosione); // <-- volume applicato
+                AudioSource.PlayClipAtPoint(success, camera.transform.position, volumeEsplosione);
+
             Destroy(gameObject);
         }
     }
