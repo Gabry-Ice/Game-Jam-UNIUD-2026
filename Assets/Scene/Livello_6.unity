@@ -722,7 +722,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 372126223}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b34c505675b9f94bb75287a905dd2f5, type: 3}
   m_Name: 
@@ -2072,12 +2072,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 97276212111110923, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 97276212111110923, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 97276212111110923, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 97276212111110923, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 97276212111110923, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.73505
+      value: 17.73505
       objectReference: {fileID: 0}
     - target: {fileID: 97276212111110923, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2115,6 +2127,10 @@ PrefabInstance:
       propertyPath: testoAvviso
       value: 
       objectReference: {fileID: 964658206}
+    - target: {fileID: 1744365676079978647, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
+      propertyPath: prefabSatellite
+      value: 
+      objectReference: {fileID: 1733945558841920, guid: 300f80108a63f48618cb4a1c8b8c1e86, type: 3}
     - target: {fileID: 1744365676079978647, guid: 7959f06abf69c324db515e16bba05d8c, type: 3}
       propertyPath: cameraPrincipale
       value: 
