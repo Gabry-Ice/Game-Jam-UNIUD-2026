@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement; // <--- Necessario per cambiare scena
 
 public class Satellite : MonoBehaviour
 {
     [Header("Movimento")]
     public float velocita = 3f;
     public float raggioMassimo = 15f;
-    public float ritardoVisibilita = 1; // Tempo dopo il quale diventa visibile
+    public float ritardoVisibilita = 1;
 
     [Header("Rotazione")]
     public Vector3 velocitaRotazione = new Vector3(0f, 90f, 45f);
+
+    [Header("Scena")]
+    public string nomeScenaWin = "WINscreen"; // Il nome della scena da caricare
 
     [HideInInspector]
     public SatelliteSpawner spawner;
@@ -26,39 +30,23 @@ public class Satellite : MonoBehaviour
         float angolo = Random.Range(0f, 360f) * Mathf.Deg2Rad;
         direzione = new Vector3(Mathf.Cos(angolo), 0f, Mathf.Sin(angolo)).normalized;
 
-        // Ottieni i componenti
         objectRenderer = GetComponent<Renderer>();
         objectCollider = GetComponent<Collider>();
 
-        // Nascondi il satellite all'inizio
-        if (objectRenderer != null)
-            objectRenderer.enabled = false;
+        if (objectRenderer != null) objectRenderer.enabled = false;
+        if (objectCollider != null) objectCollider.enabled = false;
 
-        if (objectCollider != null)
-            objectCollider.enabled = false;
-
-        // Rendi visibile dopo il ritardo
         Invoke(nameof(RendiVisibile), ritardoVisibilita);
-
-        // Avvia il movimento dopo il ritardo
         Invoke(nameof(AvviaMovimento), ritardoVisibilita);
     }
 
     void RendiVisibile()
     {
-        if (objectRenderer != null)
-            objectRenderer.enabled = true;
-
-        if (objectCollider != null)
-            objectCollider.enabled = true;
-
-        Debug.Log($"Satellite {gameObject.name} ora visibile!");
+        if (objectRenderer != null) objectRenderer.enabled = true;
+        if (objectCollider != null) objectCollider.enabled = true;
     }
 
-    void AvviaMovimento()
-    {
-        inMovimento = true;
-    }
+    void AvviaMovimento() { inMovimento = true; }
 
     void Update()
     {
@@ -79,6 +67,9 @@ public class Satellite : MonoBehaviour
         {
             if (spawner != null)
                 spawner.OnCheckpointRaccolto();
+
+            // Carica la scena della vittoria
+            SceneManager.LoadScene(nomeScenaWin);
 
             Destroy(gameObject);
         }
