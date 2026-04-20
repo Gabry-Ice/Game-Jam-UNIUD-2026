@@ -19,7 +19,7 @@ public class SatelliteSpawner : MonoBehaviour
 
     [Header("Avviso")]
     public string messaggioAvviso = "CHECKPOINT IN ARRIVO!";
-    public float durataAvviso = 3f;
+    public float durataAvviso = 3f; //ciao
 
     int satelliteSpawnati = 0;
     bool checkpointPreso = false;
