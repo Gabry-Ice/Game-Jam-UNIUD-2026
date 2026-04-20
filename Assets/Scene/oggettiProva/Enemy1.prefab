@@ -50,6 +50,7 @@ MonoBehaviour:
   velocitaRotazione: 5
   durataInseguimento: 8
   velocitaFuga: 8
+  velocitaCaduta: 30
 --- !u!65 &2233739361654952167
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -69,8 +70,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.331689, y: 0.9774866, z: 7.1954145}
-  m_Center: {x: 0.7241368, y: 3.1509442, z: -0.11282015}
+  m_Size: {x: 3.3199813, y: 0.9774866, z: 7.1954145}
+  m_Center: {x: 0.2182833, y: 3.1509442, z: -0.11282015}
 --- !u!1001 &78658826782976186
 PrefabInstance:
   m_ObjectHideFlags: 0

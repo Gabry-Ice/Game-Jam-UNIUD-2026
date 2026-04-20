@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement; // 🔥 AGGIUNTO
 
 public class SatelliteSpawner : MonoBehaviour
 {
@@ -41,6 +42,15 @@ public class SatelliteSpawner : MonoBehaviour
         StopAllCoroutines();
         NascondiAvviso();
         Debug.Log("Checkpoint preso – nessun altro spawn.");
+
+        // 🔥 SALVA IL LIVELLO ATTUALE
+        string currentLevel = SceneManager.GetActiveScene().name;
+        PlayerPrefs.SetString("CurrentLevel", currentLevel);
+
+        Debug.Log("Salvato livello: " + currentLevel);
+
+        // 🔥 VAI ALLA WIN SCREEN
+        SceneManager.LoadScene("WINscreen");
     }
 
     void SpawnSatellite()
@@ -121,7 +131,6 @@ public class SatelliteSpawner : MonoBehaviour
             testoAvviso.gameObject.SetActive(false);
     }
 
-    // Mostra il raggio nell'editor come sfera wireframe
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
