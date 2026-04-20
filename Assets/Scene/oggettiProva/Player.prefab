@@ -211,6 +211,8 @@ MonoBehaviour:
   moltiplicatoreBoost: 2
   durataBoost: 0.2
   tempoRicarica: 3
+  dash: {fileID: 0}
+  volumeEsplosione: 10
   offsetBordo: 0.05
   cameraPrincipale: {fileID: 0}
 --- !u!1 &8696560814051754218
@@ -336,6 +338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navetta: {fileID: 2586374905509860117}
+  camera: {fileID: 0}
   sfxEsplosione: {fileID: 8300000, guid: cffca233f5201b64db45e1c401aa8ab0, type: 3}
   prefabEsplosione: {fileID: 191186, guid: 079954accd64b32419ec069129c81273, type: 3}
   ritardoDistruzione: 1

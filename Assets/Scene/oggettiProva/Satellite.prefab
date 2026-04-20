@@ -87,6 +87,10 @@ MonoBehaviour:
   velocitaDiscesa: 7
   altezzaMinima: -10
   velocitaRotazione: {x: 0, y: 90, z: 0}
+  camera: {fileID: 0}
+  success: {fileID: 8300000, guid: 74cab60b877c0974485db1ec63420882, type: 3}
+  volumeEsplosione: 1
+  spawner: {fileID: 0}
 --- !u!65 &2990863870253134426
 BoxCollider:
   m_ObjectHideFlags: 0

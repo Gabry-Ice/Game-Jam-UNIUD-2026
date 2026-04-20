@@ -264,6 +264,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8802145466295013419, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 862302559}
+    - target: {fileID: 8802145466295013419, guid: 54bc0fc9ef502d0448bef0a328a4e09a, type: 3}
       propertyPath: sfxEsplosione
       value: 
       objectReference: {fileID: 8300000, guid: cffca233f5201b64db45e1c401aa8ab0, type: 3}
@@ -447,7 +451,10 @@ MonoBehaviour:
   - {fileID: 6043588751216293171, guid: 8ce4b4c8b7e4c254aa81948db7398d2c, type: 3}
   - {fileID: 6043588751216293171, guid: 7ffb9af8ac36160469340d0008074f63, type: 3}
   - {fileID: 6043588751216293171, guid: ac68396647a37114ca0e8269c0ee1ce4, type: 3}
-  prefabAstronavi: []
+  prefabAstronavi:
+  - {fileID: 2586374905509860117, guid: 3a8514f410c9d474db6cc42e52006550, type: 3}
+  - {fileID: 2586374905509860117, guid: 168dd9251711df649be4a09693cd3505, type: 3}
+  - {fileID: 2586374905509860117, guid: 997597213d06a9142813c26e65d44de7, type: 3}
   intervalloSpawn: 2
   raggioSpawn: 10
   nave: {fileID: 900753084}
@@ -1070,12 +1077,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0285d0d3e767adf4a87062903e5ffcd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocita: 10
+  velocita: 30
   velocitaRotazione: 10
   velocitaBoost: 20
   moltiplicatoreBoost: 2
   durataBoost: 0.2
   tempoRicarica: 3
+  dash: {fileID: 8300000, guid: c9a1e9f49c8d44e419c6279748fa60f0, type: 3}
+  volumeEsplosione: 1
   offsetBordo: 1
   cameraPrincipale: {fileID: 862302559}
 --- !u!1 &946132195
